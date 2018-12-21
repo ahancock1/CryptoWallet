@@ -1,16 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿// -----------------------------------------------------------------------
+//   Copyright (C) 2018 Adam Hancock
+//    
+//   Startup.cs Licensed under the MIT License. See LICENSE file in
+//   the project root for full license information.  
+// -----------------------------------------------------------------------
 
 namespace CryptoWallet
 {
+    using ElectronNET.API;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -52,9 +56,16 @@ namespace CryptoWallet
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    "default",
+                    "{controller=Home}/{action=Index}/{id?}");
             });
+
+            BootstrapElectron();
+        }
+
+        private async void BootstrapElectron()
+        {
+            await Electron.WindowManager.CreateWindowAsync();
         }
     }
 }
